@@ -5,13 +5,15 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"time"
+
 	"github.com/gorilla/mux"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
-var session, _ = mgo.Dial("127.0.0.1")
+var session, _ = mgo.Dial(os.Getenv("MONGO_HOST"))
 var c = session.DB("TutDb").C("ToDo")
 
 type ToDoItem struct {

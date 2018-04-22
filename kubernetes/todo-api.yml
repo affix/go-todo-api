@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-api
+  labels:
+    app: todo-api
+spec:
+  ports:
+    - port: 8000
+  selector:
+    app: todo-api
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-api
+  labels:
+    app: todo-api
+spec:
+  selector:
+    matchLabels:
+      app: todo-api
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: todo-api
+    spec:
+      containers:
+      - image: affixxx/todo-api:latest
+        name: todo-api
+        imagePullPolicy: Always
+        env:
+        - name: MONGO_HOST
+          value: todo-api-mongodb
+        ports:
+        - containerPort: 8000
+          name: todo-api
